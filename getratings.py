@@ -1,6 +1,7 @@
 import os
 import requests
 from urllib.parse import quote_plus
+from colorama import Fore, Style
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -28,12 +29,12 @@ def get_episode_ratings(imdb_id, total_seasons, api_key, verbose):
         if data.get('Response') == 'True':
             episodes = data.get('Episodes', [])
             highest_rated = max(episodes, key=lambda x: float(x['imdbRating']) if x['imdbRating'] != 'N/A' else 0)
-            print(f"Highest rated episode for season {season}: {highest_rated['Title']} (Rating: {highest_rated['imdbRating']})")
+            print(f"{Fore.YELLOW}Highest rated episode for {Fore.GREEN}season {season}{Fore.CYAN}: {highest_rated['Title']} Episode {highest_rated['Episode']}{Fore.YELLOW} (Rating: {highest_rated['imdbRating']}){Style.RESET_ALL}")
             
             if verbose == 'y':
                 for episode in episodes:
-                    print(f"Season {season}, Episode {episode['Episode']}: {episode['Title']}")
-                    print(f"Rating: {episode['imdbRating']} \n")
+                    print(f"{Fore.YELLOW}Season {season}, Episode {episode['Episode']}: {episode['Title']}{Style.RESET_ALL}")
+                    print(f"{Fore.YELLOW}Rating: {episode['imdbRating']} \n{Style.RESET_ALL}")
         else:
             print(f"Error retrieving season {season}: {data.get('Error')}")
 
